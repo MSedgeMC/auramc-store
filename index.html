@@ -1,0 +1,879 @@
+<!--
+  AuraMC Store — Ranks & Kits
+  Copyright (c) 2025 MSedge (https://discord.com/users/1131081133161971722)
+
+  Licensed under the MIT License.
+  See LICENSE file in the project root for full license text.
+
+  Source: https://github.com/MSedge/auramc-store
+  Not affiliated with Mojang Studios or Microsoft.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AuraMC Store — Ranks & Kits</title>
+  <meta name="description" content="Buy ranks on AuraMC — VIP, MVP and IMMORTAL kits for Lifesteal, Anarchy & Practice servers." />
+  <link rel="icon" type="image/png" href="./logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Russo+One&display=swap" rel="stylesheet">
+
+  <style>
+    /* Copyright (c) 2025 MSedge — MIT License */
+
+    :root{
+      --g:#F87171;
+      --e:#EF4444;
+      --d:#DC2626;
+
+      --vip:#6ee7f9;
+      --vip2:#38bdf8;
+
+      --mvp:#e9d5ff;
+      --mvp2:#c084fc;
+
+      --imm:#fda4af;
+      --imm2:#ef4444;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',system-ui,sans-serif;
+      background:#0a0a0a;
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    .bg-wall{
+      position:fixed;inset:0;z-index:0;
+      background:url('./backgroundimg.png') center/cover no-repeat;
+    }
+
+    .bg-ov{
+      position:fixed;inset:0;z-index:1;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(248,113,113,.08), transparent 22%),
+        radial-gradient(circle at 85% 15%, rgba(192,132,252,.08), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(56,189,248,.05), transparent 20%),
+        linear-gradient(180deg,rgba(10,10,10,.5),rgba(10,10,10,.62) 20%,rgba(10,10,10,.78) 50%,rgba(10,10,10,.92) 80%,rgba(10,10,10,.97));
+    }
+
+    .content{position:relative;z-index:10}
+
+    .glass{
+      position:relative;overflow:hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.06), transparent 28%),
+        linear-gradient(145deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,.03) 48%,rgba(0,0,0,.18) 100%);
+      backdrop-filter:blur(38px) saturate(180%) brightness(1.05);
+      -webkit-backdrop-filter:blur(38px) saturate(180%) brightness(1.05);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        inset 0 -1px 0 rgba(0,0,0,.24),
+        inset 1px 0 0 rgba(255,255,255,.05),
+        inset -1px 0 0 rgba(0,0,0,.08),
+        0 10px 40px rgba(0,0,0,.5),
+        0 2px 8px rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.09);
+    }
+
+    .glass::before{
+      content:'';
+      position:absolute;inset:0;padding:1px;border-radius:inherit;pointer-events:none;z-index:0;
+      background:linear-gradient(150deg,
+        rgba(255,255,255,.30) 0%,
+        rgba(255,255,255,.10) 14%,
+        rgba(248,113,113,.08) 28%,
+        rgba(255,255,255,.01) 50%,
+        rgba(248,113,113,.05) 72%,
+        rgba(255,255,255,.08) 88%,
+        rgba(255,255,255,.22) 100%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+    }
+
+    .glass::after{
+      content:'';
+      position:absolute;top:0;left:15%;right:15%;height:1px;border-radius:50%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);
+      pointer-events:none;z-index:1;
+    }
+
+    .glass-bubble{
+      position:relative;overflow:hidden;
+      background:linear-gradient(160deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.06) 45%,rgba(0,0,0,.1) 100%);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.42),
+        inset 0 -1px 0 rgba(0,0,0,.14),
+        inset 1px 0 0 rgba(255,255,255,.12),
+        0 3px 10px rgba(0,0,0,.22),
+        0 1px 3px rgba(0,0,0,.14);
+    }
+
+    .glass-bubble::before{
+      content:'';
+      position:absolute;top:2px;left:22%;right:22%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+      border-radius:50%;
+    }
+
+    .logo-text{
+      font-family:'Russo One',sans-serif;
+      font-size:1.2rem;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .logo-text span.white{
+      color:#fff;
+      text-shadow:0 1px 2px rgba(0,0,0,.6),0 0 8px rgba(255,255,255,.08);
+    }
+
+    .logo-text span.green{
+      background:linear-gradient(135deg,#F87171,#EF4444,#DC2626);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:drop-shadow(0 1px 3px rgba(248,113,113,.3));
+      position:relative;
+    }
+
+    .logo-text span.green::after{
+      content:'';
+      position:absolute;
+      bottom:-2px;left:0;width:100%;height:2px;
+      background:linear-gradient(90deg,transparent,rgba(248,113,113,.4),transparent);
+      border-radius:1px;
+    }
+
+    .logo-icon{
+      width:34px;height:34px;border-radius:10px;
+      border:1.5px solid rgba(248,113,113,.2);
+      box-shadow:0 2px 8px rgba(0,0,0,.3),0 0 12px rgba(248,113,113,.08);
+      image-rendering:pixelated;
+      transition:transform .2s;
+    }
+
+    .logo-icon:hover{transform:scale(1.08) rotate(-3deg)}
+
+    .gt-t{position:relative;display:inline-block}
+
+    .gt-tip{
+      position:absolute;bottom:100%;left:50%;
+      transform:translateX(-50%) translateY(4px);
+      opacity:0;transition:all .2s;pointer-events:none;
+      white-space:nowrap;font-size:11px;color:var(--g);
+      font-family:'Inter',sans-serif;margin-bottom:6px;
+    }
+
+    .gt-t:hover .gt-tip{
+      opacity:1;transform:translateX(-50%) translateY(-4px);
+    }
+
+    .nav-ip{
+      font-family:'JetBrains Mono',monospace;
+      font-size:13px;font-weight:700;color:var(--g);
+      padding:6px 14px;border-radius:8px;
+      background:rgba(248,113,113,.08);
+      border:1px solid rgba(248,113,113,.2);
+      cursor:pointer;transition:all .2s;user-select:none;
+      display:inline-block;
+    }
+
+    .nav-ip:hover{
+      background:rgba(248,113,113,.15);
+      border-color:rgba(248,113,113,.35);
+    }
+
+    .nav-ip:active{transform:scale(.97)}
+
+    .nav-stat{
+      font-family:'JetBrains Mono',monospace;
+      font-size:12px;font-weight:700;
+      color:rgba(255,255,255,.82);
+      padding:6px 12px;border-radius:8px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      display:inline-flex;align-items:center;gap:7px;
+    }
+
+    .nav-stat .dot{
+      width:7px;height:7px;border-radius:999px;
+      background:#4ade80;
+      box-shadow:0 0 8px rgba(74,222,128,.55);
+    }
+
+    .nav{position:fixed;top:0;left:0;right:0;z-index:50;border-bottom:1px solid transparent;transition:border-color .3s}
+    .nav.s{border-bottom-color:rgba(255,255,255,.05)}
+
+    .mob{max-height:0;overflow:hidden;transition:max-height .3s,opacity .3s;opacity:0}
+    .mob.open{max-height:300px;opacity:1}
+
+    .season-glass{
+      position:relative;overflow:hidden;
+      background:linear-gradient(145deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,.03) 50%,rgba(0,0,0,.15) 100%);
+      backdrop-filter:blur(40px) saturate(180%) brightness(1.04);
+      -webkit-backdrop-filter:blur(40px) saturate(180%) brightness(1.04);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.16),
+        inset 0 -1px 0 rgba(0,0,0,0.25),
+        inset 1px 0 0 rgba(255,255,255,0.06),
+        inset -1px 0 0 rgba(0,0,0,0.12),
+        0 8px 32px rgba(0,0,0,.45),
+        0 2px 8px rgba(0,0,0,.3);
+      border-radius:9999px;
+      display:inline-flex;
+    }
+
+    .season-glass::before{
+      content:'';
+      position:absolute;inset:0;padding:1px;border-radius:inherit;pointer-events:none;z-index:0;
+      background:linear-gradient(150deg,
+        rgba(255,255,255,.30) 0%,
+        rgba(255,255,255,.10) 14%,
+        rgba(248,113,113,.08) 28%,
+        rgba(255,255,255,.01) 50%,
+        rgba(248,113,113,.06) 72%,
+        rgba(255,255,255,.08) 88%,
+        rgba(255,255,255,.22) 100%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+    }
+
+    .season-glass::after{
+      content:'';
+      position:absolute;top:0;left:15%;right:15%;height:1px;border-radius:50%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);
+      pointer-events:none;z-index:1;
+    }
+
+    .season-badge{
+      position:relative;z-index:2;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 16px;font-size:14px;color:rgba(255,255,255,.6);
+    }
+
+    .season-dot{
+      width:8px;height:8px;border-radius:9999px;
+      background:var(--g);display:inline-block;
+      animation:pu 2s ease-in-out infinite;
+    }
+
+    @keyframes pu{
+      0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,.5)}
+      50%{box-shadow:0 0 0 6px rgba(248,113,113,0)}
+    }
+
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);will-change:transform;pointer-events:none}
+    .orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(248,113,113,.09),transparent 70%);top:-200px;right:-100px;animation:fl 10s ease-in-out infinite}
+    .orb-2{width:450px;height:450px;background:radial-gradient(circle,rgba(220,38,38,.07),transparent 70%);bottom:-150px;left:-150px;animation:fl 12s ease-in-out infinite reverse}
+    .orb-3{width:350px;height:350px;background:radial-gradient(circle,rgba(192,132,252,.07),transparent 70%);top:40%;left:40%;animation:fl 15s ease-in-out infinite 3s}
+    @keyframes fl{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}}
+
+    .card-vip{--accent:var(--vip);--accent2:var(--vip2);--border:rgba(110,231,249,.25);--glow:rgba(56,189,248,.16)}
+    .card-mvp{--accent:var(--mvp);--accent2:var(--mvp2);--border:rgba(216,180,254,.38);--glow:rgba(192,132,252,.28)}
+    .card-imm{--accent:var(--imm);--accent2:var(--imm2);--border:rgba(248,113,113,.28);--glow:rgba(239,68,68,.2)}
+
+    .kit-card{
+      position:relative;overflow:hidden;border-radius:24px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.08), transparent 26%),
+        linear-gradient(145deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 50%,rgba(0,0,0,.14) 100%);
+      backdrop-filter:blur(50px) saturate(190%) brightness(1.06);
+      -webkit-backdrop-filter:blur(50px) saturate(190%) brightness(1.06);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.22),0 14px 48px rgba(0,0,0,.55);
+      transition:transform .3s,box-shadow .3s,border-color .3s;
+    }
+
+    .kit-card::before{
+      content:"";position:absolute;inset:0;padding:1px;border-radius:24px;pointer-events:none;z-index:0;
+      background:linear-gradient(150deg,rgba(255,255,255,.28) 0%,var(--border) 22%,rgba(255,255,255,.01) 50%,var(--border) 78%,rgba(255,255,255,.20) 100%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+    }
+
+    .kit-card::after{
+      content:"";position:absolute;top:0;left:14%;right:14%;height:1px;border-radius:50%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);pointer-events:none;z-index:1
+    }
+
+    .kit-card:hover{
+      transform:translateY(-8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 24px 64px rgba(0,0,0,.68),0 0 44px var(--glow);
+      border-color:var(--border);
+    }
+
+    .card-mvp.kit-card{
+      transform:translateY(-10px) scale(1.04);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 28px 84px rgba(0,0,0,.72),0 0 70px rgba(192,132,252,.22);
+      border-color:rgba(216,180,254,.42);
+    }
+
+    .card-mvp.kit-card:hover{
+      transform:translateY(-14px) scale(1.05);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 34px 94px rgba(0,0,0,.76),0 0 90px rgba(192,132,252,.32);
+    }
+
+    .popular-wrap{
+      position:absolute;top:0;left:0;right:0;height:3px;border-radius:24px 24px 0 0;
+      background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);z-index:2
+    }
+
+    .mvp-glow{
+      position:absolute;top:-50px;right:-60px;width:220px;height:220px;
+      background:radial-gradient(circle,rgba(192,132,252,.24),transparent 70%);
+      filter:blur(24px);pointer-events:none;
+    }
+
+    .tier-icon{
+      width:38px;height:38px;border-radius:13px;
+      display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+      background:linear-gradient(160deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.06) 50%,rgba(0,0,0,.12) 100%);
+      border:1px solid rgba(255,255,255,.2);
+      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.38),inset 0 -1px 0 rgba(0,0,0,.15),0 3px 10px rgba(0,0,0,.25)
+    }
+
+    .tier-icon::before{
+      content:"";position:absolute;top:2px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)
+    }
+
+    .tier-icon-vip{background:linear-gradient(160deg,rgba(110,231,249,.22) 0%,rgba(56,189,248,.08) 50%,rgba(0,0,0,.12) 100%);border-color:rgba(110,231,249,.34)}
+    .tier-icon-mvp{background:linear-gradient(160deg,rgba(233,213,255,.24) 0%,rgba(192,132,252,.1) 50%,rgba(0,0,0,.12) 100%);border-color:rgba(233,213,255,.42)}
+    .tier-icon-imm{background:linear-gradient(160deg,rgba(253,164,175,.22) 0%,rgba(239,68,68,.08) 50%,rgba(0,0,0,.12) 100%);border-color:rgba(253,164,175,.36)}
+
+    .price-badge{
+      font-family:'JetBrains Mono',monospace;
+      font-weight:700;
+      border-radius:15px;
+      padding:10px 22px;
+      display:inline-block;
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(160deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 50%,rgba(0,0,0,.1) 100%);
+      border:1px solid var(--border);
+      color:var(--accent);
+      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(0,0,0,.12),0 0 20px var(--glow),0 3px 10px rgba(0,0,0,.2)
+    }
+
+    .price-badge::before{
+      content:"";position:absolute;top:2px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)
+    }
+
+    .kit-img-wrap{
+      position:relative;border-radius:14px;overflow:hidden;background:rgba(0,0,0,.3);
+      border:1px solid rgba(255,255,255,.06);image-rendering:pixelated
+    }
+
+    .kit-img-wrap img{width:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+
+    .feat-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .feat-item:last-child{border-bottom:none}
+    .feat-icon{width:18px;height:18px;flex-shrink:0;margin-top:2px}
+
+    .cmd-tag{
+      font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:4px 10px;border-radius:7px;
+      background:linear-gradient(160deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,.04) 50%,rgba(0,0,0,.08) 100%);
+      border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.65);display:inline-block;margin:2px 2px 2px 0;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 6px rgba(0,0,0,.15)
+    }
+
+    .btn-buy{
+      width:100%;
+      padding:14px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:15px;
+      color:#fff;
+      border:1px solid var(--border);
+      cursor:pointer;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      position:relative;
+      z-index:2;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03)),
+        linear-gradient(135deg, rgba(18,18,22,.92) 0%, rgba(26,26,34,.94) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.15),
+        inset 0 -1px 0 rgba(0,0,0,.22),
+        0 8px 22px rgba(0,0,0,.35),
+        0 0 22px var(--glow);
+      transition:all .22s;
+    }
+
+    .btn-buy::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    .btn-buy:hover{
+      transform:translateY(-2px);
+      border-color:var(--accent);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -1px 0 rgba(0,0,0,.22),
+        0 12px 30px rgba(0,0,0,.42),
+        0 0 34px var(--glow);
+    }
+
+    .btn-buy:active{transform:translateY(0)}
+
+    .btn-buy .btn-text{
+      color:#fff;
+      letter-spacing:.01em;
+    }
+
+    .discord-png{
+      width:18px;height:18px;display:block;flex-shrink:0;object-fit:contain;
+      filter:drop-shadow(0 0 6px rgba(88,101,242,.22)) drop-shadow(0 1px 1px rgba(0,0,0,.18));
+    }
+
+    .tier-badge{
+      font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:4px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 2px 6px rgba(0,0,0,.18)
+    }
+
+    .glass-bubble-vip{background:linear-gradient(160deg,rgba(110,231,249,.18) 0%,rgba(56,189,248,.06) 45%,rgba(0,0,0,.1) 100%);border-color:rgba(110,231,249,.35)}
+    .glass-bubble-mvp{background:linear-gradient(160deg,rgba(233,213,255,.20) 0%,rgba(192,132,252,.08) 45%,rgba(0,0,0,.1) 100%);border-color:rgba(233,213,255,.4)}
+    .glass-bubble-imm{background:linear-gradient(160deg,rgba(253,164,175,.18) 0%,rgba(239,68,68,.06) 45%,rgba(0,0,0,.1) 100%);border-color:rgba(253,164,175,.35)}
+
+    .btt{
+      position:fixed;bottom:24px;right:24px;z-index:40;width:40px;height:40px;border-radius:12px;
+      background:rgba(10,10,10,.8);border:1px solid rgba(248,113,113,.15);
+      display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;
+      opacity:0;transform:translateY(16px);pointer-events:none
+    }
+
+    .btt.vis{opacity:1;transform:translateY(0);pointer-events:all}
+    .btt:hover{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)}
+
+    .toast{
+      position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px) scale(.95);
+      opacity:0;z-index:9999;transition:all .3s cubic-bezier(.68,-.55,.265,1.55);pointer-events:none
+    }
+
+    .toast.show{transform:translateX(-50%) translateY(0) scale(1);opacity:1}
+
+    .firefly{
+      position:fixed;z-index:5;pointer-events:none;width:4px;height:4px;border-radius:50%;
+      background:rgba(248,113,113,.7);box-shadow:0 0 6px 2px rgba(239,68,68,.4),0 0 12px 4px rgba(220,38,38,.15);will-change:transform,opacity
+    }
+
+    @keyframes firefly-drift{
+      0%{transform:translate(0,0) scale(1);opacity:0}
+      5%{opacity:.8}
+      25%{transform:translate(30px,-40px) scale(.8);opacity:1}
+      50%{transform:translate(-20px,-70px) scale(1.1);opacity:.6}
+      75%{transform:translate(40px,-30px) scale(.7);opacity:.9}
+      95%{opacity:.3}
+      100%{transform:translate(10px,-90px) scale(.5);opacity:0}
+    }
+
+    @media(max-width:900px){
+      .card-mvp.kit-card{transform:none}
+      .card-mvp.kit-card:hover{transform:translateY(-8px)}
+    }
+
+    @media(max-width:640px){.orb{display:none}}
+
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+  </style>
+</head>
+<body>
+  <div class="bg-wall"></div>
+  <div class="bg-ov"></div>
+  <div id="mc-ambient" aria-hidden="true"></div>
+
+  <div class="content">
+    <nav id="nav" class="nav">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-[72px]">
+          <a href="https://auramc.top" class="flex items-center space-x-2.5 flex-shrink-0">
+            <img src="./logo.png" alt="AuraMC Network" class="logo-icon">
+            <span class="logo-text">
+              <span class="white">Aura</span><span class="green">MC Network</span>
+            </span>
+          </a>
+
+          <div class="hidden md:flex items-center space-x-3">
+            <a href="https://auramc.top" class="text-white/60 hover:text-white text-sm font-medium transition-colors">← Back to Home</a>
+
+            <div class="gt-t">
+              <span class="gt-tip">Click to copy</span>
+              <div class="nav-ip" onclick="copyIP()">play.auramc.top</div>
+            </div>
+
+            <div class="nav-stat">
+              <span class="dot"></span>
+              <span id="nav-players">-- online</span>
+            </div>
+          </div>
+
+          <button id="mt" class="md:hidden flex flex-col space-y-1.5 p-2" aria-label="Menu">
+            <span class="block w-5 h-0.5 bg-white transition-all origin-center" id="h1"></span>
+            <span class="block w-5 h-0.5 bg-white transition-all" id="h2"></span>
+            <span class="block w-5 h-0.5 bg-white transition-all origin-center" id="h3"></span>
+          </button>
+        </div>
+
+        <div id="mm" class="mob md:hidden">
+          <div class="pb-4 pt-1 space-y-2 border-t border-white/5 mt-1">
+            <a href="https://auramc.top" class="flex items-center gap-3 px-4 py-2.5 text-white/60 hover:text-white text-sm rounded-lg hover:bg-white/5 transition-colors">← Back to Home</a>
+            <div class="mx-4 gt-t">
+              <span class="gt-tip">Click to copy</span>
+              <div class="nav-ip text-left block w-auto" onclick="copyIP()">play.auramc.top</div>
+            </div>
+            <div class="mx-4 nav-stat w-fit">
+              <span class="dot"></span>
+              <span id="nav-players-mobile">-- online</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="relative min-h-[44vh] flex items-center justify-center overflow-hidden pt-20 pb-4">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto px-4 text-center">
+        <div class="season-glass mb-6">
+          <div class="season-badge">
+            <span class="season-dot"></span>
+            <span>AuraMC Store</span>
+          </div>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4">
+          Upgrade Your<br>
+          <span style="background:linear-gradient(135deg,#F87171,#EF4444,#DC2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Experience</span>
+        </h1>
+
+        <p class="text-white/50 text-lg max-w-xl mx-auto">
+          Pick a rank, get your kit, and dominate across all our servers. VIP, MVP and IMMORTAL — each with unique gear and commands.
+        </p>
+      </div>
+    </section>
+
+    <div class="max-w-5xl mx-auto px-4 mb-12">
+      <div class="glass rounded-2xl px-6 py-4 flex flex-col sm:flex-row items-center gap-4 text-sm">
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center glass-bubble" style="border-color:rgba(88,101,242,.35)">
+            <img src="./discord.png" alt="Discord" class="discord-png" style="width:18px;height:18px">
+          </div>
+          <span class="font-semibold text-white">How to Buy</span>
+        </div>
+
+        <div class="text-white/50 text-center sm:text-left">
+          Open a ticket in our <a href="https://discord.gg/3FwP5hgsUb" target="_blank" class="text-[#7289da] hover:text-[#99aab5] transition-colors font-medium">Discord server</a>, tell us which rank you want, pay via UPI or bank transfer, and get your rank activated within minutes.
+        </div>
+
+        <a href="https://discord.gg/3FwP5hgsUb" target="_blank" class="flex-shrink-0 px-5 py-2 rounded-xl font-semibold text-white transition-all hover:brightness-110 text-sm flex items-center gap-2" style="background:#5865F2;box-shadow:0 2px 12px rgba(88,101,242,.35)">
+          <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px">
+            <path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.249.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.045-.32 13.58.1 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.994 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.1.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03Z"/>
+          </svg>
+          Open Ticket →
+        </a>
+      </div>
+    </div>
+
+    <section class="max-w-6xl mx-auto px-4 pb-24">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-7 items-stretch">
+
+        <div class="kit-card card-vip p-7 flex flex-col">
+          <div class="relative z-10 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2.5">
+                <div class="tier-icon tier-icon-vip">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#6ee7f9" stroke-width="2.2" stroke-linejoin="round">
+                    <path d="M2 9L12 3l10 6-10 12L2 9z"/><path d="M2 9h20"/><path d="M12 3l4 6-4 12-4-12 4-6z"/>
+                  </svg>
+                </div>
+                <span class="font-black text-xl tracking-wide" style="color:#6ee7f9">VIP</span>
+              </div>
+              <span class="tier-badge glass-bubble glass-bubble-vip text-xs font-semibold" style="color:#cffafe">Entry</span>
+            </div>
+
+            <div class="price-badge text-2xl mb-5">₹150</div>
+            <div class="kit-img-wrap mb-6 rounded-xl"><img src="./vip.png" alt="VIP Kit Preview"></div>
+
+            <div class="mb-6 flex-1">
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#6ee7f9" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <div><span class="text-white/80 text-sm font-medium">Home Limit</span><span class="ml-2 text-sm font-bold" style="color:#6ee7f9">2 Homes</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#6ee7f9" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div><span class="text-white/80 text-sm">Full <span class="font-semibold">Diamond</span> Armor &amp; Tools</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#6ee7f9" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <div class="text-sm text-white/80"><span class="font-semibold">5×</span> Totems · <span class="font-semibold">64×</span> Crystals · Shield</div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <p class="text-[10px] uppercase tracking-widest text-white/30 font-semibold mb-2">Commands</p>
+              <span class="cmd-tag">/hat</span>
+            </div>
+
+            <a href="https://discord.gg/3FwP5hgsUb" target="_blank" class="btn-buy mt-auto">
+              <img src="./discord.png" alt="Discord" class="discord-png">
+              <span class="btn-text">Purchase on Discord</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="kit-card card-mvp p-7 flex flex-col">
+          <div class="popular-wrap"></div>
+          <div class="mvp-glow"></div>
+
+          <div class="relative z-10 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2.5">
+                <div class="tier-icon tier-icon-mvp">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="#e9d5ff">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </div>
+                <span class="font-black text-xl tracking-wide" style="color:#e9d5ff">MVP</span>
+              </div>
+              <span class="tier-badge glass-bubble glass-bubble-mvp text-xs font-semibold" style="color:#f3e8ff">Popular</span>
+            </div>
+
+            <div class="price-badge text-2xl mb-5">₹299</div>
+            <div class="kit-img-wrap mb-6 rounded-xl"><img src="./mvp.png" alt="MVP Kit Preview"></div>
+
+            <div class="mb-6 flex-1">
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#e9d5ff" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <div><span class="text-white/80 text-sm font-medium">Home Limit</span><span class="ml-2 text-sm font-bold" style="color:#e9d5ff">4 Homes</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#e9d5ff" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div class="text-sm text-white/80">Full <span class="font-semibold">Netherite</span> + <span class="font-semibold">Mace</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#e9d5ff" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <div class="text-sm text-white/80"><span class="font-semibold">9×</span> Totems · <span class="font-semibold">128×</span> Crystals</div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#e9d5ff" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+                <div class="text-sm text-white/80">Power <span class="font-semibold">Bow</span></div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <p class="text-[10px] uppercase tracking-widest text-white/30 font-semibold mb-2">Commands</p>
+              <span class="cmd-tag">/hat</span><span class="cmd-tag">/echest</span>
+            </div>
+
+            <a href="https://discord.gg/3FwP5hgsUb" target="_blank" class="btn-buy mt-auto">
+              <img src="./discord.png" alt="Discord" class="discord-png">
+              <span class="btn-text">Purchase on Discord</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="kit-card card-imm p-7 flex flex-col">
+          <div class="relative z-10 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2.5">
+                <div class="tier-icon tier-icon-imm">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#fda4af" stroke-width="2" stroke-linejoin="round">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26C17.81 13.47 19 11.38 19 9c0-3.87-3.13-7-7-7z"/>
+                    <line x1="9" y1="18" x2="9" y2="21"/>
+                    <line x1="15" y1="18" x2="15" y2="21"/>
+                    <circle cx="9.5" cy="9.5" r="1.5" fill="#fda4af" stroke="none"/>
+                    <circle cx="14.5" cy="9.5" r="1.5" fill="#fda4af" stroke="none"/>
+                  </svg>
+                </div>
+                <span class="font-black text-xl tracking-wide" style="color:#fda4af">IMMORTAL</span>
+              </div>
+              <span class="tier-badge glass-bubble glass-bubble-imm text-xs font-semibold" style="color:#fecdd3">Elite</span>
+            </div>
+
+            <div class="price-badge text-2xl mb-5">₹499</div>
+            <div class="kit-img-wrap mb-6 rounded-xl"><img src="./immortal.png" alt="IMMORTAL Kit Preview"></div>
+
+            <div class="mb-6 flex-1">
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#fda4af" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <div><span class="text-white/80 text-sm font-medium">Home Limit</span><span class="ml-2 text-sm font-bold" style="color:#fda4af">8 Homes</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#fda4af" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div class="text-sm text-white/80"><span class="font-semibold">Netherite</span> + <span class="font-semibold">Elytra</span> + <span class="font-semibold">Mace</span></div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#fda4af" stroke-width="2" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+                <div class="text-sm text-white/80"><span class="font-semibold">3× Stacks</span> Crystals &amp; Obsidian</div>
+              </div>
+              <div class="feat-item">
+                <svg class="feat-icon" fill="none" stroke="#fda4af" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <div class="text-sm text-white/80"><span class="font-semibold">9×</span> Totems of Undying</div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <p class="text-[10px] uppercase tracking-widest text-white/30 font-semibold mb-2">Commands</p>
+              <span class="cmd-tag">/hat</span><span class="cmd-tag">/echest</span><span class="cmd-tag">/anvil</span><span class="cmd-tag">/disposal</span>
+            </div>
+
+            <a href="https://discord.gg/3FwP5hgsUb" target="_blank" class="btn-buy mt-auto">
+              <img src="./discord.png" alt="Discord" class="discord-png">
+              <span class="btn-text">Purchase on Discord</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <h2 class="text-2xl font-black text-center mb-8 tracking-tight">Full Comparison</h2>
+        <div class="glass rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/[.06]">
+                  <th class="text-left px-6 py-4 text-white/40 font-semibold uppercase tracking-wider text-xs w-48">Feature</th>
+                  <th class="px-6 py-4 text-center font-black text-base" style="color:#6ee7f9">VIP</th>
+                  <th class="px-6 py-4 text-center font-black text-base" style="color:#e9d5ff">MVP</th>
+                  <th class="px-6 py-4 text-center font-black text-base" style="color:#fda4af">IMMORTAL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Price</td><td class="px-6 py-3.5 text-center font-bold" style="color:#6ee7f9">₹150</td><td class="px-6 py-3.5 text-center font-bold" style="color:#e9d5ff">₹299</td><td class="px-6 py-3.5 text-center font-bold" style="color:#fda4af">₹499</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Home Limit</td><td class="px-6 py-3.5 text-center text-white/70">2</td><td class="px-6 py-3.5 text-center text-white/70">4</td><td class="px-6 py-3.5 text-center text-white/70">8</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Armor Tier</td><td class="px-6 py-3.5 text-center text-white/70">Diamond</td><td class="px-6 py-3.5 text-center text-white/70">Netherite</td><td class="px-6 py-3.5 text-center text-white/70">Netherite</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Totems</td><td class="px-6 py-3.5 text-center text-white/70">5×</td><td class="px-6 py-3.5 text-center text-white/70">9×</td><td class="px-6 py-3.5 text-center text-white/70">9×</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Crystals</td><td class="px-6 py-3.5 text-center text-white/70">64×</td><td class="px-6 py-3.5 text-center text-white/70">128×</td><td class="px-6 py-3.5 text-center text-white/70">3× Stacks</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Elytra</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55">Mace</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center" style="color:#e9d5ff">✓</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55 font-mono text-xs">/hat</td><td class="px-6 py-3.5 text-center" style="color:#6ee7f9">✓</td><td class="px-6 py-3.5 text-center" style="color:#e9d5ff">✓</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55 font-mono text-xs">/echest</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center" style="color:#e9d5ff">✓</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+                <tr class="border-b border-white/[.04] hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55 font-mono text-xs">/anvil</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+                <tr class="hover:bg-white/[.02] transition-colors"><td class="px-6 py-3.5 text-white/55 font-mono text-xs">/disposal</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center text-white/35">✗</td><td class="px-6 py-3.5 text-center" style="color:#fda4af">✓</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer style="background:rgba(10,10,10,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-2.5">
+            <img src="./logo.png" alt="AuraMC Network" class="logo-icon" style="width:22px;height:22px;border-radius:6px">
+            <span class="logo-text" style="font-size:.95rem">
+              <span class="white">Aura</span><span class="green">MC Network</span>
+            </span>
+          </div>
+          <span class="text-white/35 text-xs ml-0.5">Anarchy, Practice &amp; Lifesteal — est. 2025.</span>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 pb-5 flex flex-col md:flex-row items-center justify-between gap-2">
+        <span class="text-white/25 text-xs">© Made by <a href="https://discord.com/users/1131081133161971722" target="_blank" class="text-red-400 hover:text-red-300 transition-colors font-semibold">MSedge</a></span>
+        <span class="text-white/20 text-xs">Not affiliated with Mojang Studios.</span>
+      </div>
+    </footer>
+  </div>
+
+  <button id="btt" class="btt" aria-label="Back to top">
+    <svg class="w-4 h-4" style="color:#F87171" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <div id="toast" class="toast px-5 py-2.5 rounded-xl glass shadow-xl flex items-center gap-2">
+    <svg class="w-4 h-4 flex-shrink-0" style="color:#F87171" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+    <span class="text-sm font-medium" id="toast-msg">Copied!</span>
+  </div>
+
+  <!-- Copyright (c) 2025 MSedge — MIT License -->
+  <script>
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>30),{passive:true});
+
+    const mt=document.getElementById('mt'),mm=document.getElementById('mm');
+    const h=[document.getElementById('h1'),document.getElementById('h2'),document.getElementById('h3')];
+    let mOpen=false;
+    mt.addEventListener('click',()=>{
+      mOpen=!mOpen;mm.classList.toggle('open',mOpen);
+      h[0].style.transform=mOpen?'rotate(45deg) translate(4px,4px)':'';
+      h[1].style.opacity=mOpen?'0':'';
+      h[2].style.transform=mOpen?'rotate(-45deg) translate(4px,-4px)':'';
+    });
+
+    const btt=document.getElementById('btt');
+    window.addEventListener('scroll',()=>btt.classList.toggle('vis',scrollY>400),{passive:true});
+    btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+    function showToast(msg){
+      const t=document.getElementById('toast'),m=document.getElementById('toast-msg');
+      m.textContent=msg;
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),2200);
+    }
+
+    function copyIP(){
+      navigator.clipboard.writeText('play.auramc.top')
+        .then(()=>showToast('IP copied!'))
+        .catch(()=>showToast('play.auramc.top'));
+    }
+
+    async function fetchPlayers(){
+      try{
+        const r=await fetch('https://api.mcsrvstat.us/3/play.auramc.top');
+        const d=await r.json();
+        const txt = d.online ? `${d.players?.online || 0} online` : 'offline';
+        document.getElementById('nav-players').textContent = txt;
+        document.getElementById('nav-players-mobile').textContent = txt;
+      }catch(e){
+        document.getElementById('nav-players').textContent='-- online';
+        document.getElementById('nav-players-mobile').textContent='-- online';
+      }
+    }
+    fetchPlayers();
+    setInterval(fetchPlayers,60000);
+
+    function spawnFirefly(){
+      const f=document.createElement('div');
+      f.className='firefly';
+      f.style.left=Math.random()*90+5+'%';
+      f.style.top=Math.random()*70+10+'%';
+      const d=8+Math.random()*12;
+      f.style.animation=`firefly-drift ${d}s ease-in-out forwards`;
+      const hue=Math.random()*20;
+      f.style.background=`hsla(${hue},90%,65%,.7)`;
+      f.style.boxShadow=`0 0 6px 2px hsla(${hue},90%,55%,.4),0 0 12px 4px hsla(${hue},90%,45%,.12)`;
+      document.getElementById('mc-ambient').appendChild(f);
+      setTimeout(()=>f.remove(),d*1000);
+    }
+
+    if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+      for(let i=0;i<6;i++) setTimeout(spawnFirefly,i*100);
+      setInterval(spawnFirefly,3500);
+    }
+  </script>
+</body>
+</html>
